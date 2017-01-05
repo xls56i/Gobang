@@ -1,0 +1,261 @@
+Microsoft (R) Macro Assembler Version 6.11		    01/05/17 14:14:02
+tempfile.asm						     Page 1 - 1
+
+
+				PUBLIC SUBPROG1
+				CURSOR MACRO ROW,COLUMN
+					PUSH AX
+					PUSH BX
+					PUSH DX
+					MOV AH,02
+					MOV BH,00
+					MOV DH,ROW
+					MOV DL,COLUMN
+					INT 10H
+					POP DX
+					POP BX
+					POP AX
+					ENDM
+
+				DISPLAY MACRO STRING
+					PUSH AX
+					PUSH DX
+					MOV AH,09
+					MOV DX,OFFSET STRING
+					INT 21H
+					POP DX
+					POP AX
+					ENDM
+				BLOCK MACRO x1,y1,x2,y2
+					MOV AH,06
+					MOV AL,00
+					MOV BH,0a3
+					MOV CH,y1
+					MOV CL,x1
+					MOV DH,y2
+					MOV DL,x2
+					INT 10H
+					ENDM
+				.MODEL SMALL
+				.STACK 64
+ 0000				.DATA
+ 0000 57 65 6C 63 6F 6D		WEL DB 'Welcome!$'
+       65 21 24
+ 0009 54 77 6F 20 50 6C		STARTGAME1 DB 'Two Players(Press F1)$'
+       61 79 65 72 73 28
+       50 72 65 73 73 20
+       46 31 29 24
+ 001F 4F 6E 65 20 50 6C		STARTGAME2 DB 'One Player(Press F2)$'
+       61 79 65 72 28 50
+       72 65 73 73 20 46
+       32 29 24
+ 0034 51 75 69 74 20 47		QUITGAME DB 'Quit Game(Press q)$'
+       61 6D 65 28 50 72
+       65 73 73 20 71 29
+       24
+
+ 0000				.CODE
+ 0000				SUBPROG1 PROC FAR
+ 0000  B8 ---- R			MOV AX,@DATA
+ 0003  8E D8				MOV DS,AX
+					
+ 0005  B4 00				mov ah,00
+ 0007  B0 03			    mov al,03
+ 0009  CD 10			    int 10h
+ 000B  B4 09			    mov ah,09
+ 000D  B7 00			    mov bh,00
+ 000F  B0 20			    mov al,20h
+ 0011  B9 07D0			    mov cx,2000
+ 0014  B3 3F			    mov bl,3fh
+ 0016  CD 10			    int 10h
+				    
+				    BLOCK 25,8,55,10
+ 0018  B4 06		     1		MOV AH,06
+ 001A  B0 00		     1		MOV AL,00
+ 001C  B7 67		     1		MOV BH,0a3
+ 001E  B5 08		     1		MOV CH,8
+ 0020  B1 19		     1		MOV CL,25
+ 0022  B6 0A		     1		MOV DH,10
+ 0024  B2 37		     1		MOV DL,55
+ 0026  CD 10		     1		INT 10H
+				    BLOCK 25,13,55,15
+ 0028  B4 06		     1		MOV AH,06
+ 002A  B0 00		     1		MOV AL,00
+ 002C  B7 67		     1		MOV BH,0a3
+ 002E  B5 0D		     1		MOV CH,13
+ 0030  B1 19		     1		MOV CL,25
+ 0032  B6 0F		     1		MOV DH,15
+ 0034  B2 37		     1		MOV DL,55
+ 0036  CD 10		     1		INT 10H
+				    BLOCK 25,18,55,20
+ 0038  B4 06		     1		MOV AH,06
+ 003A  B0 00		     1		MOV AL,00
+ 003C  B7 67		     1		MOV BH,0a3
+ 003E  B5 12		     1		MOV CH,18
+ 0040  B1 19		     1		MOV CL,25
+ 0042  B6 14		     1		MOV DH,20
+ 0044  B2 37		     1		MOV DL,55
+ 0046  CD 10		     1		INT 10H
+				    CURSOR 5,37
+ 0048  50		     1		PUSH AX
+ 0049  53		     1		PUSH BX
+ 004A  52		     1		PUSH DX
+ 004B  B4 02		     1		MOV AH,02
+ 004D  B7 00		     1		MOV BH,00
+ 004F  B6 05		     1		MOV DH,5
+ 0051  B2 25		     1		MOV DL,37
+ 0053  CD 10		     1		INT 10H
+ 0055  5A		     1		POP DX
+ 0056  5B		     1		POP BX
+ 0057  58		     1		POP AX
+				    DISPLAY WEL
+ 0058  50		     1		PUSH AX
+ 0059  52		     1		PUSH DX
+ 005A  B4 09		     1		MOV AH,09
+ 005C  BA 0000 R	     1		MOV DX,OFFSET WEL
+ 005F  CD 21		     1		INT 21H
+ 0061  5A		     1		POP DX
+ 0062  58		     1		POP AX
+				    CURSOR 9,30
+ 0063  50		     1		PUSH AX
+ 0064  53		     1		PUSH BX
+ 0065  52		     1		PUSH DX
+ 0066  B4 02		     1		MOV AH,02
+ 0068  B7 00		     1		MOV BH,00
+ 006A  B6 09		     1		MOV DH,9
+ 006C  B2 1E		     1		MOV DL,30
+ 006E  CD 10		     1		INT 10H
+ 0070  5A		     1		POP DX
+ 0071  5B		     1		POP BX
+ 0072  58		     1		POP AX
+				    DISPLAY STARTGAME1
+ 0073  50		     1		PUSH AX
+ 0074  52		     1		PUSH DX
+ 0075  B4 09		     1		MOV AH,09
+ 0077  BA 0009 R	     1		MOV DX,OFFSET STARTGAME1
+ 007A  CD 21		     1		INT 21H
+ 007C  5A		     1		POP DX
+ 007D  58		     1		POP AX
+				    CURSOR 14,30
+ 007E  50		     1		PUSH AX
+ 007F  53		     1		PUSH BX
+ 0080  52		     1		PUSH DX
+ 0081  B4 02		     1		MOV AH,02
+ 0083  B7 00		     1		MOV BH,00
+ 0085  B6 0E		     1		MOV DH,14
+ 0087  B2 1E		     1		MOV DL,30
+ 0089  CD 10		     1		INT 10H
+ 008B  5A		     1		POP DX
+ 008C  5B		     1		POP BX
+ 008D  58		     1		POP AX
+				    DISPLAY STARTGAME2
+ 008E  50		     1		PUSH AX
+ 008F  52		     1		PUSH DX
+ 0090  B4 09		     1		MOV AH,09
+ 0092  BA 001F R	     1		MOV DX,OFFSET STARTGAME2
+ 0095  CD 21		     1		INT 21H
+ 0097  5A		     1		POP DX
+ 0098  58		     1		POP AX
+				    CURSOR 19,30
+ 0099  50		     1		PUSH AX
+ 009A  53		     1		PUSH BX
+ 009B  52		     1		PUSH DX
+ 009C  B4 02		     1		MOV AH,02
+ 009E  B7 00		     1		MOV BH,00
+ 00A0  B6 13		     1		MOV DH,19
+ 00A2  B2 1E		     1		MOV DL,30
+ 00A4  CD 10		     1		INT 10H
+ 00A6  5A		     1		POP DX
+ 00A7  5B		     1		POP BX
+ 00A8  58		     1		POP AX
+					DISPLAY QUITGAME
+ 00A9  50		     1		PUSH AX
+ 00AA  52		     1		PUSH DX
+ 00AB  B4 09		     1		MOV AH,09
+ 00AD  BA 0034 R	     1		MOV DX,OFFSET QUITGAME
+ 00B0  CD 21		     1		INT 21H
+ 00B2  5A		     1		POP DX
+ 00B3  58		     1		POP AX
+					
+					
+ 00B4				AGAIN:
+ 00B4  B4 01				MOV AH,01
+ 00B6  CD 16				INT 16H
+ 00B8  B4 00				MOV AH,0
+ 00BA  CD 16				INT 16H
+ 00BC  3C 71				CMP AL,'q'
+ 00BE  74 10				JE EXIT	
+ 00C0  3C 51				CMP AL,'Q'
+ 00C2  74 0C				JE EXIT
+ 00C4  80 FC 3B				CMP AH,3BH
+ 00C7  74 07				JE EXIT
+ 00C9  80 FC 3C				CMP AH,3CH
+ 00CC  74 02				JE EXIT
+ 00CE  EB E4				JMP AGAIN
+ 00D0				EXIT:	
+ 00D0  CB				RET
+ 00D1				SUBPROG1 ENDP
+					END
+
+
+
+
+
+
+
+
+
+Microsoft (R) Macro Assembler Version 6.11		    01/05/17 14:14:02
+tempfile.asm						     Symbols 2 - 1
+
+
+
+
+Macros:
+
+                N a m e                 Type
+
+BLOCK  . . . . . . . . . . . . .	Proc
+CURSOR . . . . . . . . . . . . .	Proc
+DISPLAY  . . . . . . . . . . . .	Proc
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 0047	  Word	  Public  'DATA'	
+STACK  . . . . . . . . . . . . .	16 Bit	 0040	  Para	  Stack	  'STACK'	 
+_TEXT  . . . . . . . . . . . . .	16 Bit	 00D1	  Word	  Public  'CODE'	
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+SUBPROG1 . . . . . . . . . . . .	P Far	 0000	  _TEXT	Length= 00D1 Public
+  AGAIN  . . . . . . . . . . . .	L Near	 00B4	  _TEXT	
+  EXIT . . . . . . . . . . . . .	L Near	 00D0	  _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0000h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+QUITGAME . . . . . . . . . . . .	Byte	 0034	  _DATA	
+STARTGAME1 . . . . . . . . . . .	Byte	 0009	  _DATA	
+STARTGAME2 . . . . . . . . . . .	Byte	 001F	  _DATA	
+WEL  . . . . . . . . . . . . . .	Byte	 0000	  _DATA	
+
+	   0 Warnings
+	   0 Errors

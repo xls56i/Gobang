@@ -1,0 +1,134 @@
+Microsoft (R) Macro Assembler Version 6.11		    01/05/17 14:13:34
+tempfile.asm						     Page 1 - 1
+
+
+				PUBLIC BEEP
+				.MODEL SMALL
+				.STACK 64
+ 0000				.DATA
+ 0000 11CA 11CA 0FDA 11CA	NOTES DW 11CAH,11CAH,0FDAH,11CAH,0D5BH,0E1FH,11CAH
+       0D5B 0E1F 11CA
+ 000E 02 02 04 04 04 08		Duration DB 2,2,4,4,4,8,2
+       02
+ 0000				.CODE
+ 0000				BEEP PROC FAR
+ 0000  B8 ---- R			MOV AX,@DATA
+ 0003  8E D8				MOV DS,AX
+ 0005  B0 B6				MOV AL,0B6H
+ 0007  E6 43				OUT 43H,AL
+ 0009  BB 0007				MOV BX,7
+ 000C  8D 36 0000 R			LEA SI,NOTES
+ 0010  8D 3E 000E R			LEA DI,Duration
+ 0014				AGAIN:
+ 0014  8B 04				MOV AX,[SI]
+ 0016  E6 42				OUT 42H,AL
+ 0018  8A 15				MOV DL,[DI]
+ 001A  E8 0007				CALL SpkON
+ 001D  46				INC SI
+ 001E  46				INC SI
+ 001F  47				INC DI
+ 0020  4B				DEC BX
+ 0021  75 F1				JNZ AGAIN
+					
+ 0023				EXIT:
+ 0023  CB				RET
+ 0024				BEEP ENDP
+ 0024				SpkON PROC
+ 0024  E4 61				IN AL,61H
+ 0026  8A E0				MOV AH,AL
+ 0028  0C 03				OR AL,00000011B
+ 002A  E6 61				OUT 61H,AL
+ 002C				BACK:
+ 002C  E8 0021				CALL DELAY
+ 002F  FE CA				DEC DL
+ 0031  80 FA 00				CMP DL,00
+ 0034  75 F6				JNE BACK
+ 0036  8A C4				MOV AL,AH
+ 0038  E6 61				OUT 61H,AL
+ 003A  E8 0001				CALL DELAY_OFF
+ 003D  C3				RET
+ 003E				SpkON ENDP
+
+ 003E				DELAY_OFF PROC NEAR
+ 003E  B9 014B				MOV CX,331
+ 0041  50				PUSH AX
+ 0042				WAIT0:
+ 0042  E4 61				IN AL,61H
+ 0044  24 10				AND AL,10H
+ 0046  38 E0				CMP AL,AH
+ 0048  74 F8				JE WAIT0
+ 004A  8A E0				MOV AH,AL
+ 004C  E2 F4				LOOP WAIT0
+ 004E  58				POP AX
+ 004F  C3				RET
+ 0050				DELAY_OFF ENDP
+
+ 0050				DELAY PROC NEAR
+ 0050  B9 8184				MOV CX,33156
+ 0053  50				PUSH AX
+ 0054				WAIT1:
+ 0054  E4 61				IN AL,61H
+ 0056  24 10				AND AL,10H
+ 0058  38 E0				CMP AL,AH
+ 005A  74 F8				JE WAIT1
+ 005C  8A E0				MOV AH,AL
+ 005E  E2 F4				LOOP WAIT1
+ 0060  58				POP AX
+ 0061  C3				RET
+ 0062				DELAY ENDP
+					END
+
+
+
+
+
+
+Microsoft (R) Macro Assembler Version 6.11		    01/05/17 14:13:34
+tempfile.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 0015	  Word	  Public  'DATA'	
+STACK  . . . . . . . . . . . . .	16 Bit	 0040	  Para	  Stack	  'STACK'	 
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0062	  Word	  Public  'CODE'	
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+BEEP . . . . . . . . . . . . . .	P Far	 0000	  _TEXT	Length= 0024 Public
+  AGAIN  . . . . . . . . . . . .	L Near	 0014	  _TEXT	
+  EXIT . . . . . . . . . . . . .	L Near	 0023	  _TEXT	
+DELAY_OFF  . . . . . . . . . . .	P Near	 003E	  _TEXT	Length= 0012 Public
+  WAIT0  . . . . . . . . . . . .	L Near	 0042	  _TEXT	
+DELAY  . . . . . . . . . . . . .	P Near	 0050	  _TEXT	Length= 0012 Public
+  WAIT1  . . . . . . . . . . . .	L Near	 0054	  _TEXT	
+SpkON  . . . . . . . . . . . . .	P Near	 0024	  _TEXT	Length= 001A Public
+  BACK . . . . . . . . . . . . .	L Near	 002C	  _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0000h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+Duration . . . . . . . . . . . .	Byte	 000E	  _DATA	
+NOTES  . . . . . . . . . . . . .	Word	 0000	  _DATA	
+
+	   0 Warnings
+	   0 Errors
